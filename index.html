@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mapa de Técnicos Bogotá y Alrededores</title>
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha512-XQoYMqMTK8LvdlxU8nP3jXGZo4wue1TcCf5GtJ2z5o1k2zba6FtT6nAtE8v+b1zU4QjG1TU6cJgK0s7WwK8o6A=="
+    crossorigin=""
+  />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      text-align: center;
+      margin: 1rem;
+    }
+
+    #map {
+      height: 600px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <h1>Mapa de Técnicos Bogotá y Alrededores</h1>
+  <div id="map"></div>
+
+<img src="assets/img/RyF.JPG" alt="Mapa de Bogotá" style="width:600px;">
+
+<!-- Aquí cargas tu mapa de Leaflet también -->
+<div id="map" style="height: 500px;"></div>
+
+<script src="lib/leaflet/leaflet.js"></script>
+<script src="main.js"></script>
+
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha512-kZxmQyNs17Pj1NUC8fCts2+WgB6UKAZzOHbBIv+BL+AMElMKruU1MwOrnSGShvRBaIhyRQ9GmZsP4h/KdjfH0A=="
+    crossorigin=""
+  ></script>
+
+  <script>
+    const map = L.map("map").setView([4.711, -74.0721], 11);
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "&copy; OpenStreetMap contributors",
+    }).addTo(map);
+
+    fetch("https://raw.githubusercontent.com/SantiM78/geoson/main/mapa_tecnicos_g4s.geojson")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("No se pudo cargar el GeoJSON");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        L.geoJSON(data, {
+          onEachFeature: function (feature, layer) {
+            const props = feature.properties;
+            const popup = `
+              <strong>${props.name || "Técnico"}</strong><br>
+              ${props.description || "Sin descripción"}
+            `;
+            layer.bindPopup(popup);
+          },
+        }).addTo(map);
+      })
+      .catch((error) => {
+        console.error("Error al cargar GeoJSON:", error);
+        alert("No se pudo cargar el mapa.");
+      });
+  </script>
+</body>
+</html>

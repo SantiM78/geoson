@@ -1,0 +1,13 @@
+{
+    "type": "Feature",
+    "properties": {
+      "nombre": "Juan Pérez",
+      "zona": "Zona 1",
+      "visitas": 12
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [-74.0721, 4.711]
+    }
+  }
+  
